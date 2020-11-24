@@ -34,20 +34,55 @@ class LocalBoard extends Component {
     this.getScrabbleWords();
   }
 
-  getScrabbleWords = () => {
+  getScrabbleWords = async () => {
     this.setState({ loadingWords: true });
+    let words = {};
+    console.log("Getting Words");
     let db = firebase.firestore();
-    db.collection("scrabble_words")
-      .doc("si_words")
-      .onSnapshot((doc) => {
+    await db
+      .collection("scrabble_words")
+      .doc("si_words_1")
+      .get()
+      .then((doc) => {
         let data = doc.data();
-        console.log(data);
         if (data) {
-          this.setState({ loadingWords: false, scrabbleWords: data.words });
+          words = { ...words, ...data.words };
+          console.log(Object.keys(data.words).length + " words retrieved");
         } else {
           this.setState({ loadingWords: false });
         }
       });
+    await db
+      .collection("scrabble_words")
+      .doc("si_words_2")
+      .get()
+      .then((doc) => {
+        let data = doc.data();
+        if (data) {
+          words = { ...words, ...data.words };
+          console.log(Object.keys(words).length + " words retrieved");
+          this.setState({ loadingWords: false, scrabbleWords: words });
+        } else {
+          this.setState({ loadingWords: false });
+        }
+      });
+    await db
+      .collection("scrabble_words")
+      .doc("si_words_3")
+      .get()
+      .then((doc) => {
+        let data = doc.data();
+        if (data) {
+          words = { ...words, ...data.words };
+          console.log(Object.keys(words).length + " words retrieved");
+          this.setState({ loadingWords: false, scrabbleWords: words });
+        } else {
+          this.setState({ loadingWords: false });
+        }
+      });
+    console.log(
+      "Total " + Object.keys(this.state.scrabbleWords).length + " words"
+    );
   };
 
   componentDidUpdate(prevProps, prevState) {}

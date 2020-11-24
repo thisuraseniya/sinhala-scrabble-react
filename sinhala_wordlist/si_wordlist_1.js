@@ -1,6 +1,6 @@
 //words individually
 //prettier-ignore
-export const si_words = {
+export const si_words_1 = {
     "අකටයුත්ත": 1,
     "අකටයුතුකම": 1,
     "අකම්පිත": 1,
@@ -22044,5 +22044,5 @@ export const si_words = {
     "පේනවා": 1,
     "බොනවා": 1,
     "වනවා": 1,
-    "වෙනවා": 1,
+    "වෙනවා": 1    
 };

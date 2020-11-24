@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import firebase from "../Config/firebase";
+import { si_words_1 } from "../si_wordlist_1";
+import { si_words_2 } from "../si_wordlist_2";
+import { si_words_3 } from "../si_wordlist_3";
+
 let wordListener;
 let db = firebase.firestore();
 
@@ -7,7 +11,7 @@ export default class AdminDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      words: null
+      words: null,
     };
   }
 
@@ -15,56 +19,65 @@ export default class AdminDashboard extends Component {
     wordListener = db
       .collection("scrabble_words")
       .doc("si_suggestions")
-      .onSnapshot(doc => {
+      .onSnapshot((doc) => {
         let data = doc.data();
         if (data) {
           this.setState({ words: data.words });
         }
       });
+    // console.log("Uploading words");
+    // db.collection("scrabble_words")
+    //   .doc("si_words_1")
+    //   .set({
+    //     words: si_words_1,
+    //   })
+    //   .then(function () {
+    //     console.log("Document successfully written!");
+    //   });
   }
 
   componentWillUnmount() {
     wordListener();
   }
 
-  approveWord = async word => {
+  approveWord = async (word) => {
     db.collection("scrabble_words")
       .doc("si_suggestions")
       .update({
-        words: firebase.firestore.FieldValue.arrayRemove(word)
+        words: firebase.firestore.FieldValue.arrayRemove(word),
       })
       .then(() => {
         console.log("removed from suggestions");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
 
     let field = "words." + word;
     await db
       .collection("scrabble_words")
-      .doc("si_words")
+      .doc("si_words_3")
       .update({
-        [field]: 1
+        [field]: 1,
       })
       .then(() => {
         console.log("added to dictionary");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  removeWord = word => {
+  removeWord = (word) => {
     db.collection("scrabble_words")
       .doc("si_suggestions")
       .update({
-        words: firebase.firestore.FieldValue.arrayRemove(word)
+        words: firebase.firestore.FieldValue.arrayRemove(word),
       })
       .then(() => {
         console.log("removed from suggestions");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
